@@ -1,0 +1,8 @@
+draft:
+  name: Draft
+
+working:
+  name: Working
+
+closed:
+  name: Closed
