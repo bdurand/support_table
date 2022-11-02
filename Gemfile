@@ -1,8 +1,5 @@
 source "https://rubygems.org"
 
-gem "support_table_cache", path: "#{__dir__}/../support_table_cache"
-gem "support_table_data", path: "#{__dir__}/../support_table_data"
-
 gemspec
 
 gem "rspec", "~> 3.0"

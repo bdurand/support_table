@@ -34,11 +34,8 @@ module SupportTable
     #
     # @return [void]
     def support_table(data_file: nil, key_attribute: nil, cache_by: nil, cache: nil)
-      if key_attribute
-        self.support_table_key_attribute = key_attribute
-      elsif table_exists?
-        self.support_table_key_attribute = primary_key
-      end
+      key_attribute ||= primary_key if table_exists?
+      self.support_table_key_attribute = key_attribute
 
       if data_file
         Array(data_file).each do |file|
@@ -56,7 +53,7 @@ module SupportTable
         if cache == false
           cache_by(false)
         else
-          cache_keys = [primary_key]
+          cache_keys = [primary_key, key_attribute].compact.collect(&:to_s).uniq
           if cache_by
             cache_keys.concat(Array(cache_by))
           elsif table_exists?
@@ -101,8 +98,4 @@ if defined?(ActiveRecord::Base)
   unless ActiveRecord::Base.include?(SupportTable::BelongsToSupportTable)
     ActiveRecord::Base.include(SupportTable::BelongsToSupportTable)
   end
-end
-
-if defined?(Rails::Railtie)
-  require_relative "support_table/railtie"
 end

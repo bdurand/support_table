@@ -1,19 +1,33 @@
-Define, load, and cache support table data from a YAML file with ActiveRecord.
+# Support Table Data
 
-SupportTable#find_by
+[![Continuous Integration](https://github.com/bdurand/support_table/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/bdurand/support_table/actions/workflows/continuous_integration.yml)
+[![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
 
-SupportTable#find_by_code
 
-SupportTable#where
+## Installation
 
-SupportTable#all
+Add this line to your application's Gemfile:
 
-auto add readonly scope
+```ruby
+gem "support_table"
+```
 
-SupportTable.load!
+Then execute:
+```bash
+$ bundle
+```
 
-SupportTable config
-  model
-  delete (hard, soft, deleted column name)
-  code column
-  data
+Or install it yourself as:
+```bash
+$ gem install support_table
+```
+
+## Contributing
+
+Open a pull request on [GitHub](https://github.com/bdurand/support_table).
+
+Please use the [standardrb](https://github.com/testdouble/standard) syntax and lint your code with `standardrb --fix` before submitting.
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
