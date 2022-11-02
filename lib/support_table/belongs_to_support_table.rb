@@ -5,12 +5,12 @@ module SupportTable
     extend ActiveSupport::Concern
 
     module ClassMethods
-      def belongs_to_support_table(name, *args)
+      def belongs_to_support_table(name, *args, **kwargs)
         unless include?(SupportTableCache::Associations)
           include SupportTableCache::Associations
         end
 
-        belongs_to name, *args
+        belongs_to name, *args, **kwargs
         cache_belongs_to name
       end
     end
