@@ -72,8 +72,8 @@ describe SupportTable do
   end
 
   describe "cache" do
-    it "uses the default cache" do
-      expect(Status.send(:support_table_cache_impl)).to eq nil
+    it "uses an in-memory cache by default" do
+      expect(Status.send(:support_table_cache_impl)).to be_a(SupportTableCache::MemoryCache)
     end
 
     it "can be overridden" do

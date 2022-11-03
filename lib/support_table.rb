@@ -29,11 +29,15 @@ module SupportTable
     #   attribute of the table (usually `id`).
     #
     # @param cache_by [String, Symbol, Array] List of attributes that can be used to uniquely
-    #   identify a row that can be used for caching records. If a unique key is composite key,
-    #   then
+    #   identify a row that can be used for caching records. If a unique key is made up of
+    #   multiple columns, then you will need to set it up with a call to `SupportTableCache.cache_by`
+    #
+    # @param cache [ActiveSupport::Cache::Store, Symbol, Boolean] The caching mechanism to use.
+    #   This can be either an instance of `ActiveSupport::Cache::Store` like `Rails.cache`, or
+    #   the value `:memory` to use an in-memory cache, or `false` to disable caching.
     #
     # @return [void]
-    def support_table(data_file: nil, key_attribute: nil, cache_by: nil, cache: nil)
+    def support_table(data_file: nil, key_attribute: nil, cache_by: nil, cache: :memory)
       key_attribute ||= primary_key if table_exists?
       self.support_table_key_attribute = key_attribute
 
@@ -66,7 +70,7 @@ module SupportTable
             cache_by(key)
           end
 
-          if cache
+          if cache && cache != true
             self.support_table_cache = cache
           end
         end
