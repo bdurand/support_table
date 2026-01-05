@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-class Status < ApplicationRecord
-  class Group < ApplicationRecord
-    include SupportTable
+class Status::Group < ApplicationRecord
+  support_table key_attribute: :name, attribute_helpers: :description, ttl: 1.minute
 
-    support_table key_attribute: :name, cache_by: :name, cache: :memory
-
-    has_many :statuses
-  end
+  has_many :statuses
 end

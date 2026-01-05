@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class NoTable < ApplicationRecord
-  include SupportTable
+  support_table
 end

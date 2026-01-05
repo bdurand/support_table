@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "spec_helper"
+require "spec_helper"
 
-describe SupportTable do
+RSpec.describe SupportTable do
   describe "sync_all! discovery" do
     it "discovers support table models to load with autoloading" do
       expect(Status.count).to eq 6
@@ -49,6 +49,18 @@ describe SupportTable do
     end
   end
 
+  describe "attribute_helpers" do
+    it "has helpers for the key attribute by default" do
+      expect(Status::Group.draft_name).to eq "Draft"
+      expect(Status::Group.active_name).to eq "Active"
+    end
+
+    it "adds additional helper methods" do
+      expect(Status::Group.draft_description).to eq "Non-live statuses"
+      expect(Status::Group.closed_description).to eq "Terminal statuses"
+    end
+  end
+
   describe "cache_by" do
     it "includes the primary key" do
       expect(Status.support_table_cache_by_attributes.collect(&:first)).to include(["id"])
@@ -82,6 +94,16 @@ describe SupportTable do
 
     it "can be turned off" do
       expect(NotCached.support_table_cache_by_attributes).to eq []
+    end
+  end
+
+  describe "ttl" do
+    it "is nil by default" do
+      expect(Status.support_table_cache_ttl).to eq nil
+    end
+
+    it "can set a ttl for the cache" do
+      expect(Status::Group.support_table_cache_ttl).to eq 1.minute
     end
   end
 end

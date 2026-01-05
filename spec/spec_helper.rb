@@ -3,7 +3,6 @@
 require "bundler/setup"
 
 require "active_record"
-require "zeitwerk"
 
 ActiveRecord::Base.establish_connection("adapter" => "sqlite3", "database" => ":memory:")
 
@@ -16,6 +15,7 @@ SupportTable.cache = ActiveSupport::Cache::MemoryStore.new
 ActiveRecord::Base.connection.tap do |connection|
   connection.create_table(:status_groups) do |t|
     t.string :name, null: false
+    t.string :description, null: false
     t.timestamps
   end
 
@@ -48,9 +48,14 @@ ActiveRecord::Base.connection.tap do |connection|
   end
 end
 
-loader = Zeitwerk::Loader.new
-loader.push_dir(File.expand_path("models", __dir__))
-loader.setup
+Dir.chdir(File.expand_path(__dir__)) do
+  Dir.glob("models/*.rb").each do |file|
+    class_name = file.sub("models/", "").sub(".rb", "").classify
+    autoload class_name.to_sym, File.expand_path(file, __dir__)
+  end
+
+  require_relative "models/status/group"
+end
 
 RSpec.configure do |config|
   config.order = :random
