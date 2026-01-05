@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Brian Durand"]
   spec.email = ["bbdurand@gmail.com"]
 
-  spec.summary = "PLACEHOLDER"
+  spec.summary = "Support tables for ActiveRecord models with YAML-backed data, helper methods, and automatic caching for small tables."
 
   spec.homepage = "https://github.com/bdurand/support_table"
   spec.license = "MIT"
