@@ -1,29 +1,19 @@
-draft:
-  id: 1
-  name: Draft
-  group_name: Draft
-
 pending:
-  id: 2
+  code: pending
   name: Pending
-  group_name: Open
 
-in_progress:
-  id: 3
-  name: In Progress
-  group_name: Open
-
-paused:
-  id: 4
-  name: Paused
-  group_name: Open
+active:
+  code: active
+  name: Active
 
 completed:
-  id: 5
+  code: completed
   name: Completed
-  group_name: Closed
 
 canceled:
-  id: 6
+  code: canceled
   name: Canceled
-  group_name: Closed
+
+failed:
+  code: failed
+  name: Failed

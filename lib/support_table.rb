@@ -113,7 +113,3 @@ end
 
 require_relative "support_table/belongs_to_support_table"
 require_relative "support_table/definition"
-
-if defined?(Rails::Railtie)
-  require_relative "support_table/railtie"
-end

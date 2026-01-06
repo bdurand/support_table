@@ -5,7 +5,7 @@
 [![Continuous Integration](https://github.com/bdurand/support_table/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/bdurand/support_table/actions/workflows/continuous_integration.yml)
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
 
-This gem builds on top of the [support_table_data](https://github.com/bdurand/support_table_data) and [support_table_cache](https://github.com/bdurand/support_table_cache) gems to provide a simple drop-in solution for maintaining and using support tables in a Rails application. If you have more advanced needs, you can use those gems directly or in combination with this gem.
+This gem builds on top of the [support_table_data](https://github.com/bdurand/support_table_data) and [support_table_cache](https://github.com/bdurand/support_table_cache) gems to provide a simple drop-in solution for maintaining and using support tables in a Rails application.
 
 Support tables are small database tables that contain static data that rarely changes. They are often used to represent enumerations or lookup values in an application and values are often referenced directly from code.
 
@@ -14,6 +14,8 @@ This gem provides a simple DSL for defining your Rails models as support tables.
 - the data for the table can be defined in a YAML file and distributed with the code
 - helper methods can be generated to allow code to reference specific rows from the table
 - lookups from the table will use caching to avoid querying the database repeatedly for data that rarely changes
+
+If you have more advanced needs, you can use the [support_table_data](https://github.com/bdurand/support_table_data) and [support_table_cache](https://github.com/bdurand/support_table_cache) gems directly or in combination with this gem.
 
 ## Usage
 
@@ -72,10 +74,20 @@ Status.draft         # returns the Status instance with name "Draft"
 task.status.draft?   # returns true if the task's status is "Draft"
 ```
 
-Data will be automatically synced to the database whenever rake tasks are run that setup the database (i.e. `db:migrate`, `db:test:prepare`, `db:seed`). This ensures that the data is always present in the database and matches the values defined in the codebase. You can also manually trigger synchronization with the `support_table_data:sync` rake task.
+Data will be automatically synced to the database whenever you run any of the following rake tasks:
+
+- `db:seed`
+- `db:seed:replant`
+- `db:prepare`
+- `db:test:prepare`
+- `db:fixtures:load`
+
+You can also manually trigger synchronization with the `support_table_data:sync` rake task.
+
+You **must** popululate the support table data in your test database during your deploy process or test suite setup to ensure that the data is present when your application code runs.
 
 > [!TIP]
-> Depending on your test environment setup, you may need to add a call to `SupportTable.sync_all!` in your test suite setup code to ensure that the data is present in the test database.
+> You can also call `SupportTable.sync_all!` in from your application code to synchronize the data.
 
 #### Advanced Data Settings
 
