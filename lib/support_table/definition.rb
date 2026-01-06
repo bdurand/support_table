@@ -13,7 +13,6 @@ module SupportTable
 
     # Setup a class to be a support table.
     #
-    # @param klass [Class] The ActiveRecord class to define as a support table.
     # @param data_file [String, Array<String>, nil] Path to data files to load the table from.
     # @param key_attribute [String, Symbol, nil] The name of the attribute in the data file that
     #   uniquely identifies each row in the data.
