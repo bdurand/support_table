@@ -17,6 +17,25 @@ This gem provides a simple DSL for defining your Rails models as support tables.
 
 If you have more advanced needs, you can use the [support_table_data](https://github.com/bdurand/support_table_data) and [support_table_cache](https://github.com/bdurand/support_table_cache) gems directly or in combination with this gem.
 
+## Table of Contents
+
+- [Usage](#usage)
+  - [Defining Support Table Data](#defining-support-table-data)
+    - [Advanced Data Settings](#advanced-data-settings)
+      - [Key Attribute](#key-attribute)
+      - [Data File](#data-file)
+      - [Additional Helper Methods](#additional-helper-methods)
+      - [More Data Options](#more-data-options)
+  - [Caching](#caching)
+    - [Changing The Cache Implementation](#changing-the-cache-implementation)
+    - [Specifying Cache Keys](#specifying-cache-keys)
+    - [Belongs To Caching](#belongs-to-caching)
+    - [More Cache Options](#more-cache-options)
+  - [Full Example](#full-example)
+- [Installation](#installation)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Usage
 
 Start by including the `SupportTable` concern in your `ApplicationRecord` base model.

@@ -8,3 +8,6 @@ gem "sqlite3"
 gem "appraisal"
 gem "standard", "~>1.0"
 gem "yard"
+
+gem "support_table_cache", path: "../support_table_cache"
+gem "support_table_data", path: "../support_table_data"
