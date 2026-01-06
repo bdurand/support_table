@@ -6,7 +6,7 @@
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
 [![Gem Version](https://badge.fury.io/rb/support_table.svg)](https://badge.fury.io/rb/support_table)
 
-This gem builds on top of the [support_table_data](https://github.com/bdurand/support_table_data) and [support_table_cache](https://github.com/bdurand/support_table_cache) gems to provide a simple drop-in solution for maintaining and using support tables in a Rails application.
+This gem builds on top of the [support_table_data](https://github.com/bdurand/support_table_data) and [support_table_cache](https://github.com/bdurand/support_table_cache) gems to provide a pre-configured, drop-in solution for maintaining and using support tables in a Rails application.
 
 Support tables are small database tables that contain static data that rarely changes. They are often used to represent enumerations or lookup values in an application and values are often referenced directly from code.
 
@@ -171,6 +171,12 @@ These helper methods do not need to hit the database and so can be used in situa
 
 > [!TIP]
 > You use these methods in lieu of hard coding values in the code or defining constants. This keeps all of the support table data defined in one place (the YAML file) and avoids duplication.
+
+#### Documenting Helper Methods
+
+You can generate YARD documentation for the dynamically generated helper methods by running the rake task `support_table_data:add_yard_docs`. This will add YARD comments to you support table models for the named instance helper methods (i.e. `Status.draft`, etc.). This exposes these methods in your source code for other developers and AI agents to see.
+
+You can also run the `support_table_data:verify_yard_docs` rake task in your CI pipeline to ensure that the documentation is up to date. This task will fail if the documentation is missing or out of date.
 
 #### More Data Options
 
