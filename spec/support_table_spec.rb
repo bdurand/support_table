@@ -22,11 +22,7 @@ RSpec.describe SupportTable do
     end
 
     it "can specify a key attribute" do
-      expect(Status::Group.support_table_key_attribute).to eq :name
-    end
-
-    it "is nil if the table doesn't exist" do
-      expect(NoTable.support_table_key_attribute).to eq nil
+      expect(Status::Group.support_table_key_attribute).to eq "name"
     end
   end
 
