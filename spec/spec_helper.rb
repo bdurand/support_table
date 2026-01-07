@@ -15,7 +15,8 @@ SupportTable.cache = ActiveSupport::Cache::MemoryStore.new
 
 ActiveRecord::Base.connection.tap do |connection|
   connection.create_table(:status_groups) do |t|
-    t.string :name, null: false
+    t.string :name, null: false, index: {unique: true}
+    t.string :code, null: false, index: {unique: true}
     t.string :description, null: false
     t.timestamps
   end
@@ -46,6 +47,12 @@ ActiveRecord::Base.connection.tap do |connection|
   connection.create_table(:deletable_items) do |t|
     t.string :name, null: false, index: {unique: true, where: "deleted_at IS NULL"}
     t.datetime :deleted_at
+  end
+
+  connection.create_table(:composite_keys) do |t|
+    t.string :name, null: false
+    t.string :group, null: false
+    t.index [:name, :group], unique: true
   end
 end
 

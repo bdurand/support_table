@@ -37,8 +37,7 @@ module SupportTable
     end
 
     def set_key_attribute(key_attribute)
-      key_attribute ||= klass.primary_key if klass.table_exists?
-      klass.support_table_key_attribute = key_attribute
+      klass.support_table_key_attribute = key_attribute if key_attribute
     end
 
     def set_attribute_helpers(attribute_helpers)
@@ -52,7 +51,7 @@ module SupportTable
         Array(data_file).each do |file|
           klass.add_support_table_data(file)
         end
-      elsif data_file.nil? && klass.table_exists?
+      elsif data_file.nil?
         data_root_dir = klass.support_table_data_directory || SupportTableData.data_directory || Dir.pwd
         default_data_file = File.join(data_root_dir, "#{klass.name.pluralize.underscore}.yml")
         if File.exist?(default_data_file)
@@ -62,28 +61,21 @@ module SupportTable
     end
 
     def setup_caching(cache_by, cache, ttl)
-      if klass.table_exists?
-        if cache == false
-          klass.send(:cache_by, false)
-          return
-        end
-
-        cache_keys = [klass.primary_key, klass.support_table_key_attribute].compact.collect(&:to_s).uniq
-        if cache_by
-          cache_keys.concat(Array(cache_by))
-        elsif klass.table_exists?
-          unique_keys = klass.connection.indexes(klass.table_name).select(&:unique).reject(&:where).collect(&:columns)
-          cache_keys.concat(unique_keys)
-        end
-        cache_keys.uniq! { |key| Array(key).collect(&:to_s) }
-
-        cache_keys.each do |key|
-          klass.send(:cache_by, key)
-        end
-
-        klass.support_table_cache = cache
-        klass.support_table_cache_ttl = ttl
+      if cache == false
+        klass.send(:cache_by, false)
+        return
       end
+
+      cache_keys = [klass.support_table_key_attribute, "id"]
+      cache_keys.concat(Array(cache_by)) if cache_by
+      cache_keys.uniq! { |key| Array(key).collect(&:to_s) }
+
+      cache_keys.each do |key|
+        klass.send(:cache_by, key)
+      end
+
+      klass.support_table_cache = cache
+      klass.support_table_cache_ttl = ttl
     end
   end
 end

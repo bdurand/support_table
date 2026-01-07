@@ -58,24 +58,20 @@ RSpec.describe SupportTable do
   end
 
   describe "cache_by" do
-    it "includes the primary key" do
-      expect(Status.support_table_cache_by_attributes.collect(&:first)).to include(["id"])
-    end
-
-    it "automatically uses unique indexes" do
-      expect(Status.support_table_cache_by_attributes.collect(&:first)).to include(["name"])
-    end
-
-    it "does not use unique indexes with a where clause" do
-      expect(DeletableItem.support_table_cache_by_attributes.collect(&:first)).to eq([["id"]])
-    end
-
-    it "can specify the fields to cache by" do
+    it "includes the key attribute" do
       expect(Status::Group.support_table_cache_by_attributes.collect(&:first)).to include(["name"])
     end
 
-    it "is empty if the table doesn't exist" do
-      expect(NoTable.support_table_cache_by_attributes).to eq nil
+    it "includes id by default" do
+      expect(Status::Group.support_table_cache_by_attributes.collect(&:first)).to include(["id"])
+    end
+
+    it "can specify additional fields to cache by" do
+      expect(Status::Group.support_table_cache_by_attributes.collect(&:first)).to include(["code"])
+    end
+
+    it "can composite key caching with the cache_by method" do
+      expect(CompositeKey.support_table_cache_by_attributes.collect(&:first)).to include(["group", "name"])
     end
   end
 

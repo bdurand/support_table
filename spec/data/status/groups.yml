@@ -1,11 +1,14 @@
 draft:
   name: Draft
+  code: draft
   description: Non-live statuses
 
 active:
   name: Active
+  code: active
   description: Statuses indicating ongoing work
 
 closed:
   name: Closed
+  code: closed
   description: Terminal statuses

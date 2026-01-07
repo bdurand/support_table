@@ -26,10 +26,12 @@ If you have more advanced needs, you can use the [support_table_data](https://gi
       - [Key Attribute](#key-attribute)
       - [Data File](#data-file)
       - [Additional Helper Methods](#additional-helper-methods)
+      - [Documenting Helper Methods](#documenting-helper-methods)
       - [More Data Options](#more-data-options)
   - [Caching](#caching)
+    - [Specifying Additional Cache Keys](#specifying-additional-cache-keys)
     - [Changing The Cache Implementation](#changing-the-cache-implementation)
-    - [Specifying Cache Keys](#specifying-cache-keys)
+    - [Cache TTL](#cache-ttl)
     - [Belongs To Caching](#belongs-to-caching)
     - [More Cache Options](#more-cache-options)
   - [Full Example](#full-example)
@@ -186,14 +188,40 @@ You can use any of the DSL methods defined in that gem to further customize how 
 
 ### Caching
 
-Support table data is often read frequently but changes rarely. To improve performance, lookups from support tables are cached by default.
+Support table data is often read frequently but changes rarely. To improve performance, lookups from support tables by the key attribute are cached by default. Any query that queries a record by the key attribute (i.e. `find_by(name: "Draft")` if `name` is the key attribute) will use the cache. The `id` column is also always cacheable so `find(1)` or `find_by(id: 1)` will also use the cache.
 
-Caching is automatic and requires no additional setup. Any query that queries a record by the key attribute (i.e. `find_by(id: 1)`) will use the cache. In addition, any column that contains a unique index without a `where` clause will also be cached (i.e. `find_by(name: "Draft")` would be cached if there is a unique index on the `name` column).
-
-You can use the `fetch_by` method to better express in your code that the lookup is using a cache. This method is an alias for `find_by` except that it will raise an error if the lookup is not using a cache.
+You can use the `fetch_by` method to better express in your code that the lookup is using a cache. This method is an alias for `find_by` except that it will raise an error if the lookup is not using a cache on that attribute.
 
 ```ruby
-Status.fetch_by(name: "Draft")  # uses the cache or raise an error the model does not support caching by `name`.
+# Uses the cache or raise an error if the model does not support caching by `name`.
+Status.fetch_by(name: "Draft")
+```
+
+#### Specifying Additional Cache Keys
+
+You can also manually specify the attributes that can be used for caching by passing the `cache_by` option to the `support_table` method.
+
+```ruby
+class Status < ApplicationRecord
+  support_table cache_by: :name # uses both id and name for caching
+end
+```
+
+You can even specify composite keys with the `cache_by` method.
+
+```ruby
+create_table :statuses do |t|
+  t.string :name, null: false
+  t.string :group, null: false
+  t.index [:name, :group], unique: true
+end
+
+class Status < ApplicationRecord
+  support_table
+  cache_by [:name, :group]
+end
+
+Status.fetch_by(name: "Draft", group: "Non-Live") # Uses the cache
 ```
 
 #### Changing The Cache Implementation
@@ -225,15 +253,21 @@ class Status < ApplicationRecord
 end
 ```
 
-#### Specifying Cache Keys
+#### Cache TTL
 
-You can also manually specify the attributes that can be used for caching by passing the `cache_by` option to the `support_table` method. This overrides the default behavior of adding all attributes with unique indexes. The primary key and key attribute will always be included in the cache keys, though.
+By default, cached records are stored indefinitely (until the application process restarts or the cache is cleared). You can set a time-to-live (TTL) for cached records by passing the `ttl` option to the `support_table` method.
 
 ```ruby
 class Status < ApplicationRecord
-  support_table cache_by: :name # only use id and name for caching and not other unique attributes
+  # Cache records for 1 hour.
+  support_table ttl: 1.hour
 end
 ```
+
+The TTL value should be a number of seconds or an `ActiveSupport::Duration` object. When a cached record expires, it will be reloaded from the database on the next access.
+
+> [!TIP]
+> For most support tables, you don't need to set a TTL since the data rarely changes. An in-memory cache without a TTL is the most performant option. Only set a TTL if you need to ensure the data is refreshed periodically.
 
 #### Belongs To Caching
 
