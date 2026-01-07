@@ -176,9 +176,9 @@ These helper methods do not need to hit the database and so can be used in situa
 
 #### Documenting Helper Methods
 
-You can generate YARD documentation for the dynamically generated helper methods by running the rake task `support_table_data:add_yard_docs`. This will add YARD comments to you support table models for the named instance helper methods (i.e. `Status.draft`, etc.). This exposes these methods in your source code for other developers and AI agents to see.
+You can generate YARD documentation for the dynamically generated helper methods by running the rake task `support_table_data:yard_docs:add`. This will add YARD comments to you support table models for the named instance helper methods (i.e. `Status.draft`, etc.). This exposes these methods in your source code for other developers and AI agents to see.
 
-You can also run the `support_table_data:verify_yard_docs` rake task in your CI pipeline to ensure that the documentation is up to date. This task will fail if the documentation is missing or out of date.
+You can also run the `support_table_data:yard_docs:verify` rake task in your CI pipeline to ensure that the documentation is up to date. This task will fail if the documentation is missing or out of date.
 
 #### More Data Options
 
