@@ -3,6 +3,12 @@
 require "spec_helper"
 
 RSpec.describe SupportTable do
+  describe "VERSION" do
+    it "has a version number" do
+      expect(SupportTable::VERSION).to eq(File.read(File.join(__dir__, "../VERSION")).strip)
+    end
+  end
+
   describe "sync_all! discovery" do
     it "discovers support table models to load with autoloading" do
       expect(Status.count).to eq 6

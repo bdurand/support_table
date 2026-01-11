@@ -1,9 +1,1 @@
 format: progress
-
-ignore:
-  - '**/*':
-    - Standard/SemanticBlocks
-  - 'spec/**/*':
-    - Lint/ConstantDefinitionInBlock
-    - Lint/UselessAssignment
-

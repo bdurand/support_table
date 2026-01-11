@@ -66,7 +66,10 @@ Dir.chdir(File.expand_path(__dir__)) do
 end
 
 RSpec.configure do |config|
+  config.disable_monkey_patching!
+  config.default_formatter = "doc" if config.files_to_run.one?
   config.order = :random
+  Kernel.srand config.seed
 
   config.before(:suite) do
     SupportTable.sync_all!

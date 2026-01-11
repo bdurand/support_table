@@ -32,6 +32,8 @@ require "support_table_data"
 module SupportTable
   extend ActiveSupport::Concern
 
+  VERSION = File.read(File.join(__dir__, "../VERSION")).strip
+
   included do
     include BelongsToSupportTable unless include?(BelongsToSupportTable)
   end
