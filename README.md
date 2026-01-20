@@ -1,7 +1,5 @@
 # Support Table
 
-:construction: NOT RELEASED :construction:
-
 [![Continuous Integration](https://github.com/bdurand/support_table/actions/workflows/continuous_integration.yml/badge.svg)](https://github.com/bdurand/support_table/actions/workflows/continuous_integration.yml)
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
 [![Gem Version](https://badge.fury.io/rb/support_table.svg)](https://badge.fury.io/rb/support_table)
