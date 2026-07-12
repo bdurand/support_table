@@ -93,6 +93,10 @@ RSpec.describe SupportTable do
     it "can be turned off" do
       expect(NotCached.support_table_cache_by_attributes).to eq []
     end
+
+    it "can be turned off by passing nil" do
+      expect(NilCache.support_table_cache_by_attributes).to eq []
+    end
   end
 
   describe "ttl" do
