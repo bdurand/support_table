@@ -1,9 +1,21 @@
 # frozen_string_literal: true
 
-require "bundler/setup"
+ENV["BUNDLE_GEMFILE"] ||= File.expand_path("../Gemfile", __dir__)
+
+require "bundler/setup" if File.exist?(ENV["BUNDLE_GEMFILE"])
 
 require "logger"
 require "active_record"
+
+begin
+  require "simplecov"
+  SimpleCov.start do
+    skip ["/spec/"]
+  end
+rescue LoadError
+end
+
+Bundler.require(:default, :test)
 
 ActiveRecord::Base.establish_connection("adapter" => "sqlite3", "database" => ":memory:")
 
