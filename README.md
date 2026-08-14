@@ -104,10 +104,10 @@ Data will be automatically synced to the database whenever you run any of the fo
 
 You can also manually trigger synchronization with the `support_table_data:sync` rake task.
 
-You **must** popululate the support table data in your test database during your deploy process or test suite setup to ensure that the data is present when your application code runs.
+You **must** populate the support table data in your test database during your deploy process or test suite setup to ensure that the data is present when your application code runs.
 
 > [!TIP]
-> You can also call `SupportTable.sync_all!` in from your application code to synchronize the data.
+> You can also call `SupportTable.sync_all!` from your application code to synchronize the data.
 
 #### Advanced Data Settings
 
@@ -115,7 +115,7 @@ You can customize the behavior of the support table data syncing by passing opti
 
 ##### Key Attribute
 
-One of the attributes on the table will be used as the unique identifier for each row in the YAML file. By default, this is will be the primary key on the table. You can set a different attribute by passing the `key_attribute` option.
+One of the attributes on the table will be used as the unique identifier for each row in the YAML file. By default, this will be the `id` attribute. You can set a different attribute by passing the `key_attribute` option.
 
 ```ruby
 class Status < ApplicationRecord
@@ -139,6 +139,8 @@ class Status < ApplicationRecord
   support_table data_file: "custom/statuses.yml"
 end
 ```
+
+You can pass `data_file: false` if you don't want to load data from the default data file.
 
 You can also change the base directory for all support table data files by setting `SupportTable.data_directory` in your application configuration (e.g., in an initializer).
 
@@ -186,7 +188,10 @@ You can use any of the DSL methods defined in that gem to further customize how 
 
 ### Caching
 
-Support table data is often read frequently but changes rarely. To improve performance, lookups from support tables by the key attribute are cached by default. Any query that queries a record by the key attribute (i.e. `find_by(name: "Draft")` if `name` is the key attribute) will use the cache. The `id` column is also always cacheable so `find(1)` or `find_by(id: 1)` will also use the cache.
+Support table data is often read frequently but changes rarely. To improve performance, lookups from support tables by the key attribute are cached by default. Any `find_by` query that looks up a record by the key attribute (i.e. `find_by(name: "Draft")` if `name` is the key attribute) will use the cache. The `id` column is also always cacheable so `find_by(id: 1)` will also use the cache.
+
+> [!NOTE]
+> Only `find_by`, `find_by!`, and `fetch_by` lookups use the cache. Calling `find(1)` will always query the database.
 
 You can use the `fetch_by` method to better express in your code that the lookup is using a cache. This method is an alias for `find_by` except that it will raise an error if the lookup is not using a cache on that attribute.
 
@@ -241,6 +246,9 @@ class Status < ApplicationRecord
   support_table cache: false
 end
 ```
+
+> [!NOTE]
+> Disabling the cache only affects `find_by` lookups on the model itself. Other models with a `belongs_to_support_table` association to the model may still cache the association reads in the global cache.
 
 You can specify the value `:memory` to use an in memory cache. This is the default behavior.
 

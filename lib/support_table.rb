@@ -43,16 +43,16 @@ module SupportTable
     # you need to override any of the defaults. See SupportTableData and SupportTableCache
     # for more details.
     #
-    # @param data_file [String, Array<String>, nil] Path to the data file to use to load the table. This
+    # @param data_file [String, Array<String>, false, nil] Path to the data file to use to load the table. This
     #   should be a YAML, JSON, or CSV file that defines the records that should always exist in
     #   the table. If no value is specified, then a YAML file in the data directory with the
     #   same name as the underscored, pluralized name of the class will be used. For example,
     #   if the class name is `Task::Status`, then it will look for the file `task/statuses.yml`
-    #   in the `db/support_tables` directory.
+    #   in the `db/support_tables` directory. You can pass `false` to disable loading the
+    #   default data file.
     #
     # @param key_attribute [String, Symbol, nil] The name of the attribute in the data file that
-    #   uniquely identifies each row in the data. By default this will be the primary key
-    #   attribute of the table (usually `id`).
+    #   uniquely identifies each row in the data. By default this will be the `id` attribute.
     #
     # @param attribute_helpers [String, Symbol, Array<String, Symbol>, nil] List of attributes
     #   which should have helper methods created for them. This generates methods for each named instance
@@ -65,10 +65,11 @@ module SupportTable
     #
     # @param cache [ActiveSupport::Cache::Store, Symbol, Boolean, nil] The caching mechanism to use.
     #   This can be either an instance of `ActiveSupport::Cache::Store` like `Rails.cache`, or
-    #   the value `:memory` to use an in-memory cache, or `false` to disable caching.
+    #   the value `:memory` to use an in-memory cache, or `false` or `nil` to disable caching.
     #
+    # @param ttl [Numeric, ActiveSupport::Duration, nil] The time-to-live (in seconds) for cached
+    #   records. If not specified, cached records never expire.
     #
-    # @param ttl [Numeric, ActiveSupport::Duration, nil] The time-to-live (in seconds) for cached records. If not specified,
     # @return [void]
     def support_table(data_file: nil, key_attribute: nil, attribute_helpers: nil, cache_by: nil, cache: :memory, ttl: nil)
       SupportTable::Definition.new(self).support_table(

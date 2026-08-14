@@ -1,4 +1,4 @@
-# frozen_string_leteral: true
+# frozen_string_literal: true
 
 module SupportTable
   # Class to define support table behavior on an ActiveRecord class.
@@ -61,7 +61,7 @@ module SupportTable
     end
 
     def setup_caching(cache_by, cache, ttl)
-      if cache == false
+      if cache == false || cache.nil?
         klass.send(:cache_by, false)
         return
       end
